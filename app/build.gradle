@@ -25,6 +25,9 @@ android {
         multiDexEnabled true
     }
 }
+android {
+    useLibrary 'org.apache.http.legacy'
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

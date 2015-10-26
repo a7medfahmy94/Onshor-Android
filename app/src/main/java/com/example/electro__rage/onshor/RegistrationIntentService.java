@@ -16,6 +16,10 @@
 
 package com.example.electro__rage.onshor;
 
+import java.util.*;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -87,6 +91,15 @@ public class RegistrationIntentService extends IntentService {
      */
     private void sendRegistrationToServer(String token) {
         // Add custom implementation, as needed.
+        List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
+        nameValuePair.add(new BasicNameValuePair("gcm_registration_id",token));
+        nameValuePair.add(new BasicNameValuePair("device_id","123"));
+        nameValuePair.add(new BasicNameValuePair("radius","12"));
+        nameValuePair.add(new BasicNameValuePair("number_of_shares","0"));
+        nameValuePair.add(new BasicNameValuePair("number_of_ignores","0"));
+        nameValuePair.add(new BasicNameValuePair("longitude","0"));
+        nameValuePair.add(new BasicNameValuePair("latitude","0"));
+        HTTPPostActivity.makePostRequest("users/",nameValuePair);
     }
 
     /**
