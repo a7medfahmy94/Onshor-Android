@@ -19,6 +19,7 @@ package com.example.electro__rage.onshor;
 import java.util.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -62,18 +63,12 @@ public class RegistrationIntentService extends IntentService {
     /**
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) {
-        TelephonyManager TelephonyMgr = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+    private void sendRegistrationToServer(String token) throws JSONException {
         // Add custom implementation, as needed.
-        List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
-        nameValuePair.add(new BasicNameValuePair("gcm_registration_id",token));
-        nameValuePair.add(new BasicNameValuePair("device_id",TelephonyMgr.getDeviceId()));
-        nameValuePair.add(new BasicNameValuePair("radius","12"));
-        nameValuePair.add(new BasicNameValuePair("number_of_shares","0"));
-        nameValuePair.add(new BasicNameValuePair("number_of_ignores","0"));
-        nameValuePair.add(new BasicNameValuePair("longitude","0"));
-        nameValuePair.add(new BasicNameValuePair("latitude", "0"));
-        HTTPPostActivity.makePostRequest("users/", nameValuePair);
+        if(!token.equals(User.gcm_registration_id)) {
+            User.setUser(token, 0, 0, 0.0, 0.0);
+            User.setUser(HTTPPostActivity.makePostRequest("users/", User.toArray()));
+        }
     }
 
     /**
