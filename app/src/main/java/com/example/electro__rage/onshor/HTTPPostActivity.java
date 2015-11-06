@@ -38,7 +38,7 @@ import android.util.Log;
 
 public class HTTPPostActivity {
 
-    static String base_url = "http://192.168.1.5:3000/";
+    static String base_url = "http://192.168.1.7:3000/";
 
 
     public static JSONObject makePostRequest(String url, List<NameValuePair> nameValuePair) {
@@ -58,9 +58,9 @@ public class HTTPPostActivity {
         try {
             HttpResponse response = httpClient.execute(httpPost);
             JSONObject json = new JSONObject(EntityUtils.toString(response.getEntity()));
-            Log.i("http", json.getString("id"));
-            Log.i("http", json.toString());
-            Log.i("http", response.getAllHeaders().toString());
+//            Log.i("http", json.getString("id"));
+//            Log.i("http", json.toString());
+//            Log.i("http", response.getAllHeaders().toString());
             return json;
         } catch (ClientProtocolException e) {
             // Log exception
