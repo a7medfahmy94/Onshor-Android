@@ -37,10 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
-
+    public static TextView post;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private ProgressBar mRegistrationProgressBar;
-    private TextView mInformationTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         User.device_id = TelephonyMgr.getDeviceId();
 
         setContentView(R.layout.activity_main);
-
+        post= (TextView)  findViewById(R.id.post);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -63,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
             startService(intent);
         }
     }
-
+    public static void change(){
+        post.setText(Posts.getFirst().message);
+    }
     @Override
     protected void onResume() {
         super.onResume();

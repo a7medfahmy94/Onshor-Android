@@ -18,7 +18,9 @@ public class User {
     public static Integer number_of_shares,number_of_ignores,id=-1;
     public static Double longitude,latitude,radius=10.0;
     public static void setUser(JSONObject json) throws JSONException {
-        id = Integer.parseInt(json.getString("id"));
+        if(json.has("id")) {
+            id = Integer.parseInt(json.getString("id"));
+        }
         gcm_registration_id = json.getString("gcm_registration_id");
         number_of_shares = Integer.parseInt(json.getString("number_of_shares"));
         number_of_ignores = Integer.parseInt(json.getString("number_of_ignores"));
