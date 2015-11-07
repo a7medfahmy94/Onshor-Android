@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         TelephonyManager TelephonyMgr = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
         User.device_id = TelephonyMgr.getDeviceId();
+
         setContentView(R.layout.activity_main);
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {

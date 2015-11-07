@@ -16,7 +16,7 @@ import java.util.List;
 public class User {
     public static String gcm_registration_id="red wedding",device_id;
     public static Integer number_of_shares,number_of_ignores,id=-1;
-    public static Double longitude,latitude;
+    public static Double longitude,latitude,radius=10.0;
     public static void setUser(JSONObject json) throws JSONException {
         id = Integer.parseInt(json.getString("id"));
         gcm_registration_id = json.getString("gcm_registration_id");
@@ -35,6 +35,7 @@ public class User {
     public static List<NameValuePair> toArray(){
         List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
         nameValuePair.add(new BasicNameValuePair("gcm_registration_id",gcm_registration_id));
+        nameValuePair.add(new BasicNameValuePair("radius",radius.toString()));
         nameValuePair.add(new BasicNameValuePair("device_id",device_id));
         nameValuePair.add(new BasicNameValuePair("number_of_shares",number_of_shares.toString()));
         nameValuePair.add(new BasicNameValuePair("number_of_ignores",number_of_ignores.toString()));
