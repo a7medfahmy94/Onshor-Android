@@ -66,8 +66,8 @@ public class MyGcmListenerService extends GcmListenerService {
          */
         sendNotification(message);
         Posts.addPost(data);
-
         Device.mn.change();
+
         // [END_EXCLUDE]
     }
     // [END receive_message]

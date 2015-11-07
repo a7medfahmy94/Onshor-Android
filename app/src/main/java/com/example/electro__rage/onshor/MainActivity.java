@@ -61,8 +61,14 @@ public class MainActivity extends AppCompatActivity {
             startService(intent);
         }
     }
-    public static void change(){
-        post.setText(Posts.getFirst().message);
+    public void change(){
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                post.setText(Posts.getFirst().message);
+            }
+        });
+
     }
     @Override
     protected void onResume() {
