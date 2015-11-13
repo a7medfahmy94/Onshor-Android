@@ -27,6 +27,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "MainActivity";
     public static TextView post;
+    public static Button onshor_button;
+    public static EditText onshor_text;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     @Override
@@ -47,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         User.device_id = TelephonyMgr.getDeviceId();
         Device.mn=this;
         setContentView(R.layout.activity_main);
+        onshor_button =(Button) findViewById(R.id.onshor_button);
+        onshor_text = (EditText) findViewById(R.id.onshor_text);
         post= (TextView)  findViewById(R.id.post);
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -60,6 +67,19 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
+
+        onshor_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        HTTPPostActivity.makePostRequest("posts/",Post.createPost(onshor_text.getText().toString(),0,0));
+                    }
+                }).start();
+
+            }
+        });
     }
     public void change(){
         this.runOnUiThread(new Runnable() {

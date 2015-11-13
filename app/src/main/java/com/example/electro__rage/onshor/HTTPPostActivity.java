@@ -38,7 +38,7 @@ import android.util.Log;
 
 public class HTTPPostActivity {
 
-    static String base_url = "http://192.168.1.7:3000/";
+    static String base_url = "http://192.168.1.4:3000/";
 
 
     public static JSONObject makePostRequest(String url, List<NameValuePair> nameValuePair) {

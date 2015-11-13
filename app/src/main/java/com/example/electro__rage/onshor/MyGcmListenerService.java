@@ -42,10 +42,10 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
+        String message = data.getString("content");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
-
+        Log.d(TAG, "data: " + data.toString());
         if (from.startsWith("/topics/")) {
             // message received from some topic.
         } else {

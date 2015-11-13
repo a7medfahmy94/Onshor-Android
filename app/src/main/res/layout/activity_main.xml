@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Onshor"
-        android:id="@+id/button"
+        android:id="@+id/onshor_button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="69dp" />
@@ -20,9 +20,9 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/onshor_text"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/button" />
+        android:layout_above="@+id/onshor_button" />
 
     <EditText
         android:layout_width="fill_parent"

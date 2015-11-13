@@ -2,6 +2,8 @@ package com.example.electro__rage.onshor;
 
 
 
+import android.util.Log;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -20,6 +22,8 @@ public class User {
     public static void setUser(JSONObject json) throws JSONException {
         if(json.has("id")) {
             id = Integer.parseInt(json.getString("id"));
+            System.out.print("id is initialized");
+            Log.e("id is initialized", "setUser ");
         }
         gcm_registration_id = json.getString("gcm_registration_id");
         number_of_shares = Integer.parseInt(json.getString("number_of_shares"));
