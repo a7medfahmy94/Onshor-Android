@@ -85,7 +85,11 @@ public class MainActivity extends AppCompatActivity {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                post.setText(Posts.getFirst().message);
+                try{
+                    post.setText(Posts.getFirst().message);
+                }catch(Exception e){
+                    Log.e("doesn't Have Message", "posts size 0");
+                }
             }
         });
 
@@ -93,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        change();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
     }
