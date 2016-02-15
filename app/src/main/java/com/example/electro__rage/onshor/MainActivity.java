@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try{
-                    post.setText(Posts.getFirst().message);
+                    post.setText(Posts.getLast().message);
                 }catch(Exception e){
                     Log.e("doesn't Have Message", "posts size 0");
                 }

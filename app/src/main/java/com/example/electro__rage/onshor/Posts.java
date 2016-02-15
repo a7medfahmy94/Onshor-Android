@@ -35,4 +35,7 @@ public class Posts {
     public static Post getFirst(){
         return posts.get(0);
     }
+    public static Post getLast(){
+        return posts.get(posts.size() - 1);
+    }
 }
