@@ -1,0 +1,19 @@
+<ion-view view-title="Dashboard" class="home">
+  <ion-content class="padding wrapper">
+    <h3>Welcome to Onshor</h3>
+    <p>
+      Send your message to the world!
+    </p>
+
+
+    <p ng-show="status != ''" class="animated fadeInLeft">{{status}}</p>
+
+    <div class="list home-message">
+      <label class="home-message-label item item-input">
+        <input ng-model="message.body" type="text" placeholder="Message">
+      </label>
+      <button class="button button-block button-positive" ng-click="sendMessage()">Send</button>
+    </div>
+
+  </ion-content>
+</ion-view>

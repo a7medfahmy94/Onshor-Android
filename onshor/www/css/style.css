@@ -1,0 +1,22 @@
+/* Empty. Add your own CSS if you like */
+.home {
+  background-color: #f2f5ff;
+  color: #7a8993;
+}
+h3 {
+  background: -webkit-linear-gradient(#00bcd4, #2196f3);
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+}
+.wrapper {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.home-message {
+  margin-top: 50%;
+}
+.home-message-label {
+  margin-bottom: 16px;
+}
