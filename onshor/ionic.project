@@ -4,7 +4,7 @@
   "proxies": [
     {
       "path": "/api",
-      "proxyUrl": "https://onshor-staging.herokuapp.com/"
+      "proxyUrl": "https://onshor-staging.herokuapp.com"
     }
   ]
 }

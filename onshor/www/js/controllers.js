@@ -1,8 +1,10 @@
 angular.module('starter.controllers', [])
 
-.controller('HomeCtrl', function($rootScope, $scope, $timeout, $ionicLoading, User, Device, Message) {
+.controller('HomeCtrl', function($rootScope, $scope, $cordovaGeolocation, $timeout, $ionicLoading, User, Device, Message, LOCATION_UPDATE_INTERVAL) {
   var init = function() {
-    $scope.page = {status:  "init..."};
+    $scope.page = {
+      status:  "init..."
+    };
     User.get(Device.id()).then(function(){
       $scope.page.status = "Connected";
       var user = User.currentUser;
@@ -14,6 +16,23 @@ angular.module('starter.controllers', [])
       });
     });
 
+    var watchOptions = {
+      timeout : LOCATION_UPDATE_INTERVAL,
+      enableHighAccuracy: false // may cause errors if true
+    };
+
+    var watch = $cordovaGeolocation.watchPosition(watchOptions);
+    watch.then(
+      null,
+      function(err) {
+        // error
+      },
+      function(position) {
+        console.log(position);
+        User.currentUser.longitude = position.coords.longitude;
+        User.currentUser.latitude = position.coords.latitude;
+        User.update(User.currentUser);
+    });
 
     $scope.message = {body: ''};
   };

@@ -65,6 +65,12 @@ angular.module('starter.services', [])
     return deferred.promise;
   }
 
+  User.update = function(user) {
+    return $http.put(BASE_URL + '/users/' + user.id, {
+      user: user
+    });
+  }
+
   return User;
 })
 .factory('Message', function($http, User, BASE_URL) {
@@ -81,7 +87,7 @@ angular.module('starter.services', [])
 
   return Message;
 })
-.factory('Device', function($cordovaDevice){
+.factory('Device', function($cordovaDevice,$cordovaGeolocation){
   var Device = {};
 
   Device.id = function() {
@@ -89,6 +95,10 @@ angular.module('starter.services', [])
       return "000";
     }
     return $cordovaDevice.getUUID();
+  }
+
+  Device.geolocation = function() {
+    return $cordovaGeolocation.getCurrentPosition();
   }
 
   return Device;
