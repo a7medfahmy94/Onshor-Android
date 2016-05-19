@@ -55,7 +55,7 @@ angular.module('starter.services', [])
 
   User.get = function(device_id) {
     var deferred = $q.defer();
-    $http.get('/api/users/' + device_id).then(function(response){
+    $http.get(BASE_URL + '/users/' + device_id).then(function(response){
       User.currentUser = response.data;
       deferred.resolve(response);
     }, function(response){
@@ -71,7 +71,7 @@ angular.module('starter.services', [])
   var Message = {};
 
   Message.send = function(msg) {
-    return $http.post('/api/posts',{
+    return $http.post(BASE_URL + '/posts',{
       post: {
         content: msg,
         user_id: User.currentUser.id

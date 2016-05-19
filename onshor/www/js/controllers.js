@@ -1,28 +1,28 @@
 angular.module('starter.controllers', [])
 
-.controller('HomeCtrl', function($scope, $timeout, User, Device, Message) {
+.controller('HomeCtrl', function($rootScope, $scope, $timeout, $ionicLoading, User, Device, Message) {
   var init = function() {
-    User.get(Device.id());
+    $scope.page = {status:  "init..."};
+    User.get(Device.id()).then(function(){
+      $scope.page.status = "Connected";
+      var user = User.currentUser;
+      $scope.channel = $rootScope.pusher.subscribe(user.id.toString());
+      $scope.channel.bind('new_post', function(data) {
+        $scope.$apply(function(){
+          $scope.page.status = data.message.content;
+        })
+      });
+    });
+
+
     $scope.message = {body: ''};
   };
 
   $scope.sendMessage = function() {
-    $scope.status = "sending...";
+    $ionicLoading.show();
     Message.send($scope.message.body).then(function(response){
       $scope.message.body = '';
-      $timeout(function(){
-        $scope.status = "success";
-        $timeout(function(){
-          $scope.status = "";
-        }, 3000);
-      }, 3000);
-    },function(response){
-      $timeout(function(){
-        $scope.status = "fail";
-        $timeout(function(){
-          $scope.status = "";
-        }, 3000);
-      }, 3000);
+      $ionicLoading.hide();
     })
   };
 

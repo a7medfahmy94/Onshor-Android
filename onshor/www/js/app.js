@@ -7,8 +7,16 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','ngCordova'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope, $http) {
+  // $http.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
   $ionicPlatform.ready(function() {
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+    $rootScope.pusher = new Pusher('0f300cc60a6e1c0534fd', {
+      encrypted: true
+    });
+
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {

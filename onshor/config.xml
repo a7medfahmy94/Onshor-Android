@@ -2,10 +2,10 @@
 <widget id="com.ionicframework.onshor150421" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>onshor</name>
   <description>
-        An Ionic Framework and Cordova project.
+        Onshor is the ultimate anonymous, geo-based messaging app ever !
     </description>
-  <author email="you@example.com" href="http://example.com.com/">
-      Your Name Here
+  <author email="a7med.fahmy94@gmail.com" href="http://example.com.com/">
+      Ahmed Fahmy
     </author>
   <content src="index.html"/>
   <access origin="*"/>
