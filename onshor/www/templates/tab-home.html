@@ -4,10 +4,13 @@
     <p>
       Send your message to the world!
     </p>
-
+    <p>ID: {{currentUser.id}}</p>
+    <p>Device ID: {{currentUser.device_id}}</p>
 
     <p class="animated fadeInLeft">{{page.status}}</p>
-
+    <p>{{currentPost.content}}</p>
+    <p>{{currentPost.publisher}}</p>
+    <button ng-click="sharePost()">Share</button>
     <div class="list home-message">
       <label class="home-message-label item item-input">
         <input ng-model="message.body" type="text" placeholder="Message">

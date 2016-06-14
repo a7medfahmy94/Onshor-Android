@@ -83,6 +83,12 @@ angular.module('starter.services', [])
         user_id: User.currentUser.id
       }
     });
+  };
+
+  Message.share = function(msg) {
+    return $http.post(BASE_URL + '/posts/' + msg.id + '/share', {
+      user_id: User.currentUser.id
+    })
   }
 
   return Message;

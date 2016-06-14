@@ -5,16 +5,10 @@ angular.module('starter.controllers', [])
     $scope.page = {
       status:  "init..."
     };
-    User.get(Device.id()).then(function(){
-      $scope.page.status = "Connected";
-      var user = User.currentUser;
-      $scope.channel = $rootScope.pusher.subscribe(user.id.toString());
-      $scope.channel.bind('new_post', function(data) {
-        $scope.$apply(function(){
-          $scope.page.status = data.message.content;
-        })
-      });
-    });
+    $scope.posts = [];
+    $scope.currentPost = null;
+
+    $scope.connect();
 
     var watchOptions = {
       timeout : LOCATION_UPDATE_INTERVAL,
@@ -28,7 +22,6 @@ angular.module('starter.controllers', [])
         // error
       },
       function(position) {
-        console.log(position);
         User.currentUser.longitude = position.coords.longitude;
         User.currentUser.latitude = position.coords.latitude;
         User.update(User.currentUser);
@@ -37,6 +30,26 @@ angular.module('starter.controllers', [])
     $scope.message = {body: ''};
   };
 
+  $scope.connect = function() {
+    $scope.page.status = "Connecting.."
+    User.get(Device.id()).then(function(){
+      $scope.page.status = "Connected";
+      var user = User.currentUser;
+      $scope.currentUser = User.currentUser;
+      $scope.channel = $rootScope.pusher.subscribe(user.id.toString());
+      $scope.channel.bind('new_post', function(data) {
+        $scope.$apply(function(){
+          if ($scope.currentPost == null) {
+            $scope.currentPost = data.message
+          } else {
+            $scope.posts.push(data.message);
+          }
+          // $scope.page.status = data.message.content;
+        })
+      });
+    });
+  }
+
   $scope.sendMessage = function() {
     $ionicLoading.show();
     Message.send($scope.message.body).then(function(response){
@@ -44,6 +57,17 @@ angular.module('starter.controllers', [])
       $ionicLoading.hide();
     })
   };
+
+  $scope.sharePost = function() {
+    Message.share($scope.currentPost).then(function(response){
+      if ($scope.posts.length > 0) {
+        $scope.currentPost = $scope.posts[0];
+        $scope.posts.splice(0,1);
+      } else {
+        $scope.currentPost = null;
+      }
+    })
+  }
 
   // will execute when device is ready, or immediately if the device is already ready.
   ionic.Platform.ready(function(){
