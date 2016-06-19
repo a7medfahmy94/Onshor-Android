@@ -94,13 +94,19 @@ angular.module('starter.services', [])
   return Message;
 })
 .factory('Device', function($cordovaDevice,$cordovaGeolocation){
-  var Device = {};
+  var Device = {
+    deviceId: null
+  };
 
   Device.id = function() {
-    if (!(ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
-      return "000";
+    if (Device.deviceId == null) {
+      if (!(ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
+        return "000";
+      }
+      return $cordovaDevice.getUUID();
+    } else {
+      return Device.deviceId;
     }
-    return $cordovaDevice.getUUID();
   }
 
   Device.geolocation = function() {

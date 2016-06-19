@@ -3,7 +3,8 @@ angular.module('starter.controllers', [])
 .controller('HomeCtrl', function($rootScope, $scope, $cordovaGeolocation, $timeout, $ionicLoading, User, Device, Message, LOCATION_UPDATE_INTERVAL) {
   var init = function() {
     $scope.page = {
-      status:  "init..."
+      status:  "init...",
+      channels: []
     };
     $scope.posts = [];
     $scope.currentPost = null;
@@ -36,7 +37,11 @@ angular.module('starter.controllers', [])
       $scope.page.status = "Connected";
       var user = User.currentUser;
       $scope.currentUser = User.currentUser;
-      $scope.channel = $rootScope.pusher.subscribe(user.id.toString());
+      angular.forEach($scope.page.channels,function(ch){
+        $rootScope.pusher.unsubscribe(ch);
+      })
+      $scope.page.channels = [user.device_id];
+      $scope.channel = $rootScope.pusher.subscribe(user.device_id);
       $scope.channel.bind('new_post', function(data) {
         $scope.$apply(function(){
           if ($scope.currentPost == null) {
@@ -55,18 +60,30 @@ angular.module('starter.controllers', [])
     Message.send($scope.message.body).then(function(response){
       $scope.message.body = '';
       $ionicLoading.hide();
+      $scope.flash = "Sent !";
+      $timeout(function(){
+        $scope.flash = '';
+      }, 2000)
     })
   };
 
   $scope.sharePost = function() {
     Message.share($scope.currentPost).then(function(response){
-      if ($scope.posts.length > 0) {
-        $scope.currentPost = $scope.posts[0];
-        $scope.posts.splice(0,1);
-      } else {
-        $scope.currentPost = null;
-      }
+      $scope.nextPost();
     })
+  }
+
+  $scope.nextPost = function() {
+    if ($scope.posts.length > 0) {
+      $scope.currentPost = $scope.posts[0];
+      $scope.posts.splice(0,1);
+    } else {
+      $scope.currentPost = null;
+    }
+  }
+
+  $scope.setDeviceId = function(deviceId) {
+    Device.deviceId = deviceId;
   }
 
   // will execute when device is ready, or immediately if the device is already ready.
