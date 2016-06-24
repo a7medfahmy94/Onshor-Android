@@ -80,7 +80,8 @@ angular.module('starter.services', [])
     return $http.post(BASE_URL + '/posts',{
       post: {
         content: msg,
-        user_id: User.currentUser.id
+        user_id: User.currentUser.id,
+        priority: "low"
       }
     });
   };
@@ -96,7 +97,8 @@ angular.module('starter.services', [])
       post: {
         content: msg,
         user_id: User.currentUser.id,
-        reply_to: post.user_id
+        reply_to: post.user_id,
+        priority: "medium"
       }
     });
   }
