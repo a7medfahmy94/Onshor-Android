@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('HomeCtrl', function($rootScope, $scope, $cordovaGeolocation, $timeout, $ionicLoading, User, Device, Message, LOCATION_UPDATE_INTERVAL) {
+.controller('HomeCtrl', function($rootScope, $scope, $cordovaGeolocation, $timeout, $ionicLoading,$ionicPopup , User, Device, Message, LOCATION_UPDATE_INTERVAL) {
   var init = function() {
     $scope.page = {
       status:  "init...",
@@ -90,6 +90,39 @@ angular.module('starter.controllers', [])
   ionic.Platform.ready(function(){
     init();
   });
+
+  $scope.reply = function() {
+    if($scope.currentPost){
+      $scope.data={};
+      var myPopup = $ionicPopup.show({
+        template: '<input type = "text" ng-model = "data.model">',
+        title: 'Reply',
+        subTitle: $scope.currentPost.content,
+        scope: $scope,
+
+        buttons: [
+           { text: 'Cancel' }, {
+              text: '<b>Send</b>',
+              type: 'button-positive',
+                 onTap: function(e) {
+                    if (!$scope.data.model) {
+                       //don't allow the user to close unless he enters model...
+                          e.preventDefault();
+                    } else {
+                       return $scope.data.model;
+                    }
+                 }
+           }
+        ]
+     });
+
+     myPopup.then(function(msg) {
+       Message.reply($scope.currentPost, msg).then(function(){
+         
+       });
+     });
+    }
+  }
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {

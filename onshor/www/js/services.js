@@ -88,9 +88,18 @@ angular.module('starter.services', [])
   Message.share = function(msg) {
     return $http.post(BASE_URL + '/posts/' + msg.id + '/share', {
       user_id: User.currentUser.id
-    })
+    });
   }
 
+  Message.reply = function(post, msg){
+    return $http.post(BASE_URL + '/posts',{
+      post: {
+        content: msg,
+        user_id: User.currentUser.id,
+        reply_to: post.user_id
+      }
+    });
+  }
   return Message;
 })
 .factory('Device', function($cordovaDevice,$cordovaGeolocation){
