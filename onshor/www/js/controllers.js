@@ -6,11 +6,13 @@ angular.module('starter.controllers', [])
       status:  "init...",
       channels: []
     };
-    $scope.posts = [];
-    $scope.currentPost = null;
-
+    $scope.posts = new PriorityQueue({ comparator: function(p1, p2) { return p1.priority - p2.priority; }});
     $scope.connect();
-
+    $scope.$watchCollection('posts',function(posts){
+      $scope.currentPost = null;
+      if(posts.length > 0)
+        $scope.currentPost = posts.peek();
+    });
     var watchOptions = {
       timeout : LOCATION_UPDATE_INTERVAL,
       enableHighAccuracy: false // may cause errors if true
@@ -44,11 +46,7 @@ angular.module('starter.controllers', [])
       $scope.channel = $rootScope.pusher.subscribe(user.device_id);
       $scope.channel.bind('new_post', function(data) {
         $scope.$apply(function(){
-          if ($scope.currentPost == null) {
-            $scope.currentPost = data.message
-          } else {
-            $scope.posts.push(data.message);
-          }
+            $scope.posts.queue(data.message);
           // $scope.page.status = data.message.content;
         })
       });
@@ -68,18 +66,15 @@ angular.module('starter.controllers', [])
   };
 
   $scope.sharePost = function() {
-    Message.share($scope.currentPost).then(function(response){
-      $scope.nextPost();
-    })
+    if($scope.posts.length > 0)
+      Message.share($scope.currentPost).then(function(response){
+        $scope.nextPost();
+      })
   }
 
   $scope.nextPost = function() {
-    if ($scope.posts.length > 0) {
-      $scope.currentPost = $scope.posts[0];
-      $scope.posts.splice(0,1);
-    } else {
-      $scope.currentPost = null;
-    }
+    if ($scope.posts.length > 0)
+      $scope.posts.dequeue();
   }
 
   $scope.setDeviceId = function(deviceId) {
@@ -118,7 +113,7 @@ angular.module('starter.controllers', [])
 
      myPopup.then(function(msg) {
        Message.reply($scope.currentPost, msg).then(function(){
-         
+
        });
      });
     }
