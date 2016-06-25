@@ -1,16 +1,18 @@
 angular.module('starter.controllers', [])
 
-.controller('HomeCtrl', function($rootScope, $scope, $cordovaGeolocation, $timeout, $ionicLoading, User, Device, Message, LOCATION_UPDATE_INTERVAL) {
+.controller('HomeCtrl', function($rootScope, $scope, $cordovaGeolocation, $timeout, $ionicLoading,$ionicPopup , User, Device, Message, LOCATION_UPDATE_INTERVAL) {
   var init = function() {
     $scope.page = {
       status:  "init...",
       channels: []
     };
-    $scope.posts = [];
-    $scope.currentPost = null;
-
+    $scope.posts = new PriorityQueue({ comparator: function(p1, p2) { return p1.priority - p2.priority; }});
     $scope.connect();
-
+    $scope.$watchCollection('posts',function(posts){
+      $scope.currentPost = null;
+      if(posts.length > 0)
+        $scope.currentPost = posts.peek();
+    });
     var watchOptions = {
       timeout : LOCATION_UPDATE_INTERVAL,
       enableHighAccuracy: false // may cause errors if true
@@ -44,11 +46,7 @@ angular.module('starter.controllers', [])
       $scope.channel = $rootScope.pusher.subscribe(user.device_id);
       $scope.channel.bind('new_post', function(data) {
         $scope.$apply(function(){
-          if ($scope.currentPost == null) {
-            $scope.currentPost = data.message
-          } else {
-            $scope.posts.push(data.message);
-          }
+            $scope.posts.queue(data.message);
           // $scope.page.status = data.message.content;
         })
       });
@@ -68,18 +66,15 @@ angular.module('starter.controllers', [])
   };
 
   $scope.sharePost = function() {
-    Message.share($scope.currentPost).then(function(response){
-      $scope.nextPost();
-    })
+    if($scope.posts.length > 0)
+      Message.share($scope.currentPost).then(function(response){
+        $scope.nextPost();
+      })
   }
 
   $scope.nextPost = function() {
-    if ($scope.posts.length > 0) {
-      $scope.currentPost = $scope.posts[0];
-      $scope.posts.splice(0,1);
-    } else {
-      $scope.currentPost = null;
-    }
+    if ($scope.posts.length > 0)
+      $scope.posts.dequeue();
   }
 
   $scope.setDeviceId = function(deviceId) {
@@ -90,6 +85,39 @@ angular.module('starter.controllers', [])
   ionic.Platform.ready(function(){
     init();
   });
+
+  $scope.reply = function() {
+    if($scope.currentPost){
+      $scope.data={};
+      var myPopup = $ionicPopup.show({
+        template: '<input type = "text" ng-model = "data.model">',
+        title: 'Reply',
+        subTitle: $scope.currentPost.content,
+        scope: $scope,
+
+        buttons: [
+           { text: 'Cancel' }, {
+              text: '<b>Send</b>',
+              type: 'button-positive',
+                 onTap: function(e) {
+                    if (!$scope.data.model) {
+                       //don't allow the user to close unless he enters model...
+                          e.preventDefault();
+                    } else {
+                       return $scope.data.model;
+                    }
+                 }
+           }
+        ]
+     });
+
+     myPopup.then(function(msg) {
+       Message.reply($scope.currentPost, msg).then(function(){
+
+       });
+     });
+    }
+  }
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
