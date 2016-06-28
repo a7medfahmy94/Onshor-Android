@@ -71,6 +71,10 @@ angular.module('starter.services', [])
     });
   }
 
+  User.block = function(id) {
+    return $http.post(BASE_URL + '/users/' + User.currentUser.id + '/block/' + id);
+  }
+
   return User;
 })
 .factory('Message', function($http, User, BASE_URL) {

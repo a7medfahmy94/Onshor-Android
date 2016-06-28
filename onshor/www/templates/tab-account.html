@@ -1,5 +1,10 @@
 <ion-view view-title="Account">
   <ion-content>
+    <p>ID: {{currentUser.id}}</p>
+    <p>Device ID: {{currentUser.device_id}}</p>
+
+    <p class="animated fadeInLeft">{{page.status}}</p>
+
     <div class="list home-message">
       <label class="home-message-label item item-input">
         <input ng-model="deviceId" type="text" placeholder="Device id">

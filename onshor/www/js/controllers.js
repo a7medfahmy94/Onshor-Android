@@ -33,6 +33,16 @@ angular.module('starter.controllers', [])
     $scope.message = {body: ''};
   };
 
+  $scope.block = function() {
+    User.block($scope.currentPost.publisher).then(function(){
+      $scope.nextPost();
+      $scope.flash = "User blocked";
+      $timeout(function() {
+        $scope.flash = "";
+      }, 3000)
+    })
+  }
+
   $scope.connect = function() {
     $scope.page.status = "Connecting.."
     User.get(Device.id()).then(function(){
@@ -113,7 +123,11 @@ angular.module('starter.controllers', [])
 
      myPopup.then(function(msg) {
        Message.reply($scope.currentPost, msg).then(function(){
-
+         $scope.flash = "Thanks for replying!!!";
+         $timeout(function(){
+           $scope.flash = "";
+         }, 3000);
+         $scope.nextPost();
        });
      });
     }
