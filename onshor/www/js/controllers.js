@@ -13,6 +13,20 @@ angular.module('starter.controllers', [])
       if(posts.length > 0)
         $scope.currentPost = posts.peek();
     });
+
+    $scope.message = {body: ''};
+  };
+
+  $scope.block = function() {
+    User.block($scope.currentPost.publisher).then(function(){
+      $scope.nextPost();
+      $scope.flash = "User blocked";
+      $timeout(function() {
+        $scope.flash = "";
+      }, 3000)
+    })
+  }
+  var watchPosition = function(){
     var watchOptions = {
       timeout : LOCATION_UPDATE_INTERVAL,
       enableHighAccuracy: false // may cause errors if true
@@ -29,26 +43,14 @@ angular.module('starter.controllers', [])
         User.currentUser.latitude = position.coords.latitude;
         User.update(User.currentUser);
     });
-
-    $scope.message = {body: ''};
-  };
-
-  $scope.block = function() {
-    User.block($scope.currentPost.publisher).then(function(){
-      $scope.nextPost();
-      $scope.flash = "User blocked";
-      $timeout(function() {
-        $scope.flash = "";
-      }, 3000)
-    })
   }
-
   $scope.connect = function() {
     $scope.page.status = "Connecting.."
     User.get(Device.id()).then(function(){
       $scope.page.status = "Connected";
       var user = User.currentUser;
       $scope.currentUser = User.currentUser;
+      watchPosition();
       angular.forEach($scope.page.channels,function(ch){
         $rootScope.pusher.unsubscribe(ch);
       })
